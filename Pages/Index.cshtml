@@ -1,0 +1,71 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="fileChoosing">
+        <h3>Выберите файл для загрузки</h3>
+        <form form method="post" enctype="multipart/form-data" asp-page-handler="AddFile" class="loadFileForm">
+            <input type="file" name="LastUploadedFile" accept=".mp3, .ogg, .wav, audio/mpeg, audio/ogg, audio/wav" /><br>
+            <input type="submit" value="Загрузить" />
+        </form>
+    </div>
+
+    <form method="post" asp-page-handler="RecognizeChords">
+        <input type="hidden" name="UploadedFileUrl" value="@Model.UploadedFileUrl" />
+        <input type="submit" value="Проанализировать" />
+    </form>
+
+    @if (!string.IsNullOrEmpty(Model.UploadedFileUrl))
+    {
+        <input type="hidden" name="UploadedFileUrl" value="@Model.UploadedFileUrl" />
+    }
+
+    @if (!string.IsNullOrEmpty(Model.ChordsOutput))
+    {
+        <h3>Распознанная песня:</h3>
+        <audio controls id="audio-player">
+            <source src="@Model.UploadedFileUrl" type="audio/mpeg" />
+            Ваш браузер не поддерживает аудиопроигрывание.
+        </audio>
+        <div id="chords-display">
+            <h3>Аккорды:</h3>
+            <div id="current-chord"></div>
+            <div id="next-chord"></div>
+            <div id="next2-chord"></div>
+        </div>
+
+        <script>
+            const chordNames = @Html.Raw(Json.Serialize(Model.ChordsOutput.Split(" ")));
+
+            const chordTimes = @Html.Raw(Json.Serialize(Model.ChordsIntervals.Select(t => t / 1000.0)));
+
+            const audio = document.getElementById("audio-player");
+
+            audio.addEventListener('timeupdate', () => {
+                const t = audio.currentTime;
+
+                let index = 0;
+                for (let i = 0; i < chordTimes.length; i++) {
+                    if (chordTimes[i] <= t) index = i;
+                    else break;
+                }
+                document.getElementById("current-chord").innerText =
+                    "Текущий: " + (chordNames[index] ?? "");
+
+                if (index + 1 < chordTimes.length){
+                document.getElementById("next-chord").innerText =
+                    "Следующий: " + (chordNames[index + 1] ?? "—"); }
+                if (index + 2 < chordTimes.length){
+                    document.getElementById("next2-chord").innerText = "Далее: " + (chordNames[index + 2] ?? "—");
+                }
+            });
+        </script>
+    }
+</body>

@@ -1,0 +1,9 @@
+*.sln
+x64/
+.vs/
+out/
+bin/
+
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
