@@ -109,3 +109,4 @@ D:\Projects\ChordREcognizer2k\bin\Debug\net8.0\Chords.dll
 D:\Projects\ChordREcognizer2k\bin\Debug\net8.0\Chords.pdb
 D:\Projects\ChordREcognizer2k\obj\Debug\net8.0\ChordREcognizer2k.csproj.AssemblyReference.cache
 D:\Projects\ChordREcognizer2k\obj\Debug\net8.0\ChordREc.63ADC1A5.Up2Date
+D:\Projects\ChordREcognizer2k\obj\Debug\net8.0\ChordREcognizer2k.sourcelink.json
