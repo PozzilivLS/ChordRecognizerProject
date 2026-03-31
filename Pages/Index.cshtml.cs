@@ -23,7 +23,7 @@ namespace ChordREcognizer2k.Pages
             _env = env;
         }
 
-        private IPredictor _predictor = new AutoMlPredictor("D:\\Projects\\NeuralChordRecognition\\Chords.net\\Chords\\models\\model1595137632S120L0.004830031641869656.model");
+        private IPredictor _predictor = new AutoMlPredictor("..\\NeuralChordRecognition\\Chords.net\\Chords\\models\\model1595137632S120L0.004830031641869656.model");
         private Chord[] chordsPredicted;
         private int[] chordsIntervals;
 

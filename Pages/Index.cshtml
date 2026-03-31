@@ -2,70 +2,172 @@
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
+    Layout = null;
 }
 
+<!DOCTYPE html>
+<html lang="ru">
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Анализатор аккордов</title>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" />
 </head>
+
 <body>
-    <div class="fileChoosing">
-        <h3>Выберите файл для загрузки</h3>
-        <form form method="post" enctype="multipart/form-data" asp-page-handler="AddFile" class="loadFileForm">
-            <input type="file" name="LastUploadedFile" accept=".mp3, .ogg, .wav, audio/mpeg, audio/ogg, audio/wav" /><br>
-            <input type="submit" value="Загрузить" />
-        </form>
-    </div>
+    <div class="desktop">
+        <!-- Контент с прокруткой -->
+        <div class="content-wrapper">
+            <!-- Header элементы над черным прямоугольником -->
+            <div class="global-header">
+                <!-- Logo group-4 -->
+                <div class="logo" role="img" aria-label="Логотип">
+                    <img src="~/img/group-4.svg" alt="Логотип" class="logo-img" />
+                </div>
+                
+                <!-- User controls -->
+                <div class="user-controls">
+                    <img src="~/img/vector-15.svg" alt="" class="user-icon" />
+                    <button class="profile-btn" aria-label="Профиль пользователя">
+                        <img src="~/img/ellipse-4.svg" alt="Профиль" class="profile-img" />
+                    </button>
+                </div>
+            </div>
 
-    <form method="post" asp-page-handler="RecognizeChords">
-        <input type="hidden" name="UploadedFileUrl" value="@Model.UploadedFileUrl" />
-        <input type="submit" value="Проанализировать" />
-    </form>
+            <!-- Dark rounded card container -->
+            <div class="dark-rectangle" aria-label="Основная область приложения">
+                @if (string.IsNullOrEmpty(Model.ChordsOutput))
+                {
+                    <!-- Состояние загрузки файла -->
+                    <div class="upload-area" role="region" aria-label="Зона загрузки аудиофайла" aria-describedby="upload-hint">
+                        <!-- Upload icon (cloud with arrow) - group-8 -->
+                        <div class="upload-icon-wrapper">
+                            <img src="~/img/group-9.svg" alt="Загрузка" class="cloud-with-arrow" />
+                        </div>
+                        
+                        <!-- Drag and drop label -->
+                        <p class="drag-text">Перетащите сюда свой аудиофайл</p>
+                        
+                        <!-- Separator -->
+                        <p class="or-text">или</p>
+                        
+                        <!-- File picker button -->
+                        <form method="post" enctype="multipart/form-data" asp-page-handler="AddFile" class="upload-form" id="uploadForm">
+                            <label class="file-button" for="file-input">
+                                <span class="button-text">Выберите файл</span>
+                            </label>
+                            <input id="file-input" class="file-input-hidden" type="file" name="LastUploadedFile"
+                                   accept=".mp3, .ogg, .wav, .flac, .aac, .m4a, audio/mpeg, audio/ogg, audio/wav" 
+                                   onchange="document.getElementById('uploadForm').submit();" />
+                        </form>
+                    </div>
+                    
+                    <!-- Supported formats hint -->
+                    <p class="formats-hint" id="upload-hint">Поддерживаются WAV, MP3, FLAC, AAC, OGG, M4A</p>
 
-    @if (!string.IsNullOrEmpty(Model.UploadedFileUrl))
-    {
-        <input type="hidden" name="UploadedFileUrl" value="@Model.UploadedFileUrl" />
-    }
+                    @if (!string.IsNullOrEmpty(Model.UploadedFileUrl))
+                    {
+                        <!-- Analyze button -->
+                        <div class="analyze-wrapper">
+                            <form method="post" asp-page-handler="RecognizeChords">
+                                <input type="hidden" name="UploadedFileUrl" value="@Model.UploadedFileUrl" />
+                                <button class="analyze-btn" type="submit">
+                                    <span class="analyze-text">Анализировать аккорды</span>
+                                </button>
+                            </form>
+                        </div>
+                    }
+                    else
+                    {
+                        <!-- Disabled analyze button -->
+                        <div class="analyze-wrapper disabled">
+                            <button class="analyze-btn" type="button" disabled>
+                                <span class="analyze-text">Анализировать аккорды</span>
+                            </button>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <!-- Состояние отображения результатов -->
+                    <div class="results-container">
+                        <h3 class="results-title">Распознанная песня:</h3>
+                        
+                        <audio controls id="audio-player" class="audio-player">
+                            <source src="@Model.UploadedFileUrl" type="audio/mpeg" />
+                            Ваш браузер не поддерживает аудиопроигрывание.
+                        </audio>
 
-    @if (!string.IsNullOrEmpty(Model.ChordsOutput))
-    {
-        <h3>Распознанная песня:</h3>
-        <audio controls id="audio-player">
-            <source src="@Model.UploadedFileUrl" type="audio/mpeg" />
-            Ваш браузер не поддерживает аудиопроигрывание.
-        </audio>
-        <div id="chords-display">
-            <h3>Аккорды:</h3>
-            <div id="current-chord"></div>
-            <div id="next-chord"></div>
-            <div id="next2-chord"></div>
+                        <div class="chords-panel">
+                            <h3 class="chords-title">Аккорды:</h3>
+                            <div class="chord-card previous-chord-card">
+                                <span class="chord-label">Предыдущий:</span>
+                                <span id="previous-chord" class="chord-value">—</span>
+                            </div>
+                            <div class="chord-card current-chord-card">
+                                <span class="chord-label">Текущий:</span>
+                                <span id="current-chord" class="chord-value">—</span>
+                            </div>
+                            <div class="chord-card next-chord-card">
+                                <span class="chord-label">Следующий:</span>
+                                <span id="next-chord" class="chord-value">—</span>
+                            </div>
+                        </div>
+
+                        <!-- Кнопка для новой загрузки -->
+                        <div class="analyze-wrapper new-file-btn">
+                            <button class="analyze-btn" type="button" onclick="resetUpload()">
+                                <span class="analyze-text">Загрузить новый файл</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <script>
+                        const chordNames = @Html.Raw(Json.Serialize(Model.ChordsOutput.Split(" ")));
+                        const chordTimes = @Html.Raw(Json.Serialize(Model.ChordsIntervals.Select(t => t / 1000.0)));
+                        const audio = document.getElementById("audio-player");
+
+                        if (audio) {
+                            audio.addEventListener('timeupdate', () => {
+                                const t = audio.currentTime;
+                                let currentIndex = 0;
+                                
+                                // Находим текущий аккорд
+                                for (let i = 0; i < chordTimes.length; i++) {
+                                    if (chordTimes[i] <= t) {
+                                        currentIndex = i;
+                                    } else {
+                                        break;
+                                    }
+                                }
+                                
+                                // Обновляем предыдущий аккорд
+                                if (currentIndex > 0) {
+                                    document.getElementById("previous-chord").innerText = chordNames[currentIndex - 1] ?? "—";
+                                } else {
+                                    document.getElementById("previous-chord").innerText = "—";
+                                }
+                                
+                                // Обновляем текущий аккорд
+                                document.getElementById("current-chord").innerText = chordNames[currentIndex] ?? "—";
+                                
+                                // Обновляем следующий аккорд
+                                if (currentIndex + 1 < chordTimes.length) {
+                                    document.getElementById("next-chord").innerText = chordNames[currentIndex + 1] ?? "—";
+                                } else {
+                                    document.getElementById("next-chord").innerText = "—";
+                                }
+                            });
+                        }
+
+                        function resetUpload() {
+                            window.location.href = window.location.pathname;
+                        }
+                    </script>
+                }
+            </div>
         </div>
-
-        <script>
-            const chordNames = @Html.Raw(Json.Serialize(Model.ChordsOutput.Split(" ")));
-
-            const chordTimes = @Html.Raw(Json.Serialize(Model.ChordsIntervals.Select(t => t / 1000.0)));
-
-            const audio = document.getElementById("audio-player");
-
-            audio.addEventListener('timeupdate', () => {
-                const t = audio.currentTime;
-
-                let index = 0;
-                for (let i = 0; i < chordTimes.length; i++) {
-                    if (chordTimes[i] <= t) index = i;
-                    else break;
-                }
-                document.getElementById("current-chord").innerText =
-                    "Текущий: " + (chordNames[index] ?? "");
-
-                if (index + 1 < chordTimes.length){
-                document.getElementById("next-chord").innerText =
-                    "Следующий: " + (chordNames[index + 1] ?? "—"); }
-                if (index + 2 < chordTimes.length){
-                    document.getElementById("next2-chord").innerText = "Далее: " + (chordNames[index + 2] ?? "—");
-                }
-            });
-        </script>
-    }
+    </div>
 </body>
+</html>

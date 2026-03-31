@@ -1,34 +1,591 @@
-html {
-    font-size: 14px;
+/* =============================================
+   GLOBAL STYLES
+   ============================================= */
+
+* {
+    -webkit-font-smoothing: antialiased;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-@media (min-width: 768px) {
-    html {
-        font-size: 16px;
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: "Petrov Sans-Trial-Regular", Helvetica, Arial, sans-serif;
+    background-color: #efefef;
+}
+
+button:focus-visible {
+    outline: 2px solid #4a90e2 !important;
+    outline: -webkit-focus-ring-color auto 5px !important;
+}
+
+/* Font definition */
+@font-face {
+    font-family: "Petrov Sans-Trial-Regular";
+    src: local("Petrov Sans-Trial-Regular");
+}
+
+/* =============================================
+   MAIN LAYOUT
+   ============================================= */
+
+.desktop {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #efefef;
+    padding: 27px 31px;
+}
+
+.content-wrapper {
+    max-width: 1858px;
+    margin: 0 auto;
+    position: relative;
+}
+
+/* =============================================
+   GLOBAL HEADER (над черным прямоугольником)
+   ============================================= */
+
+.global-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 0 20px;
+    position: relative;
+    z-index: 10;
+}
+
+.logo {
+    width: 67px;
+    height: 62px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+    .logo:hover {
+        transform: scale(1.05);
+    }
+
+.logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.user-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-icon {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+    .user-icon:hover {
+        transform: scale(1.1);
+    }
+
+.profile-btn {
+    width: 90px;
+    height: 90px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.3s ease;
+}
+
+    .profile-btn:hover {
+        transform: scale(1.05);
+    }
+
+.profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* =============================================
+   DARK RECTANGLE (черный прямоугольник)
+   ============================================= */
+
+.dark-rectangle {
+    position: relative;
+    width: 100%;
+    background-color: #232323;
+    border-radius: 50px;
+    padding: 80px 89px 45px 89px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 907px;
+}
+
+/* =============================================
+   UPLOAD AREA
+   ============================================= */
+
+.upload-area {
+    position: relative;
+    width: 100%;
+    max-width: 1048px;
+    min-height: 504px;
+    border-radius: 36px;
+    border: 3px dashed #efefef;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 60px 20px;
+    transition: all 0.3s ease;
+    margin-bottom: 40px;
+}
+
+    .upload-area:hover {
+        border-color: #4CAF50;
+        background-color: rgba(76, 175, 80, 0.05);
+    }
+
+/* Upload Icon Styles - group-8 */
+.upload-icon-wrapper {
+    width: 120px;
+    height: 100px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cloud-with-arrow {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.drag-text {
+    color: #ffffff;
+    font-size: 40px;
+    font-weight: 400;
+    text-align: center;
+    margin: 0;
+}
+
+.or-text {
+    color: #bbbbbb;
+    font-size: 40px;
+    font-weight: 400;
+    margin: 0;
+}
+
+/* File Button */
+.upload-form {
+    margin: 0;
+    padding: 0;
+}
+
+.file-button {
+    display: inline-block;
+    width: 339px;
+    height: 93px;
+    border-radius: 28px;
+    border: 2px solid #bbbbbb;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    line-height: 93px;
+}
+
+    .file-button:hover {
+        border-color: #ffffff;
+        transform: scale(1.02);
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+
+.button-text {
+    color: #ffffff;
+    font-size: 40px;
+    font-weight: 400;
+}
+
+.file-input-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+    pointer-events: none;
+}
+
+/* Formats Hint */
+.formats-hint {
+    font-size: 30px;
+    color: #bbbbbb;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* =============================================
+   ANALYZE BUTTON
+   ============================================= */
+
+.analyze-wrapper {
+    width: 564px;
+    height: 93px;
+    margin-top: 50px;
+    border-radius: 28px;
+    background: linear-gradient(135deg, rgba(55, 68, 54, 1) 0%, rgba(73, 115, 69, 1) 100%);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+    .analyze-wrapper:hover:not(.disabled) {
+        transform: scale(1.02);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .analyze-wrapper:active:not(.disabled) {
+        transform: scale(0.98);
+    }
+
+    .analyze-wrapper.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+.analyze-btn {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    border-radius: 28px;
+}
+
+    .analyze-btn:disabled {
+        cursor: not-allowed;
+    }
+
+.analyze-text {
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: #ffffff;
+    font-size: 40px;
+    font-weight: 400;
+    text-align: center;
+    line-height: 93px;
+}
+
+/* =============================================
+   RESULTS STYLES
+   ============================================= */
+
+.results-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    padding: 40px 0;
+    width: 100%;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.results-title {
+    color: #ffffff;
+    font-size: 36px;
+    text-align: center;
+    margin: 0;
 }
 
-html {
-    position: relative;
-    min-height: 100%;
+.audio-player {
+    width: 100%;
+    max-width: 600px;
+    border-radius: 50px;
+    background-color: #efefef;
+    padding: 10px;
 }
 
-body {
-    margin-bottom: 60px;
+.chords-panel {
+    width: 100%;
+    max-width: 800px;
+    background: rgba(239, 239, 239, 0.1);
+    border-radius: 36px;
+    padding: 30px;
+    backdrop-filter: blur(10px);
 }
 
-.fileChoosing {
+.chords-title {
+    color: #ffffff;
+    font-size: 32px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.chord-card {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 28px;
+    padding: 20px 30px;
+    margin-bottom: 20px;
     display: flex;
-    align-content: flex-start;
-    flex-wrap: wrap;
-    width: 400px;
-    height 200px;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
 }
 
-.loadFileForm {
-    display: flex;
+    .chord-card:hover {
+        transform: translateX(10px);
+        background: rgba(0, 0, 0, 0.4);
+    }
+
+.chord-label {
+    color: #bbbbbb;
+    font-size: 28px;
+    font-weight: 400;
+}
+
+.chord-value {
+    color: #ffffff;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.previous-chord-card {
+    border-left: 4px solid #ff9800;
+}
+
+.current-chord-card {
+    border-left: 4px solid #4a90e2;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        border-left-color: #4a90e2;
+    }
+
+    50% {
+        border-left-color: #6aa8f5;
+    }
+}
+
+.next-chord-card {
+    border-left: 4px solid #73b569;
+}
+
+.new-file-btn {
+    background: linear-gradient(135deg, rgba(68, 68, 68, 1) 0%, rgba(100, 100, 100, 1) 100%);
+    margin-top: 20px;
+}
+
+/* =============================================
+   RESPONSIVE DESIGN
+   ============================================= */
+
+@media (max-width: 1200px) {
+    .desktop {
+        padding: 20px;
+    }
+
+    .dark-rectangle {
+        padding: 60px 40px 40px 40px;
+    }
+
+    .drag-text,
+    .or-text,
+    .button-text,
+    .analyze-text {
+        font-size: 32px;
+    }
+
+    .file-button,
+    .analyze-wrapper {
+        width: 300px;
+        height: 80px;
+    }
+
+    .button-text,
+    .analyze-text {
+        line-height: 80px;
+    }
+
+    .upload-area {
+        min-height: auto;
+        padding: 40px 20px;
+    }
+
+    .formats-hint {
+        font-size: 24px;
+    }
+
+    .chord-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+
+    .chord-label,
+    .chord-value {
+        font-size: 24px;
+    }
+
+    .global-header {
+        margin-bottom: 15px;
+        padding: 0 10px;
+    }
+
+    .upload-icon-wrapper {
+        width: 100px;
+        height: 80px;
+    }
+}
+
+@media (max-width: 768px) {
+    .desktop {
+        padding: 15px;
+    }
+
+    .global-header {
+        margin-bottom: 10px;
+        padding: 0 5px;
+    }
+
+    .logo {
+        width: 50px;
+        height: 46px;
+    }
+
+    .profile-btn {
+        width: 60px;
+        height: 60px;
+    }
+
+    .user-icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    .dark-rectangle {
+        padding: 50px 20px 30px 20px;
+    }
+
+    .drag-text,
+    .or-text,
+    .button-text,
+    .analyze-text {
+        font-size: 24px;
+    }
+
+    .analyze-text {
+        line-height: 70px;
+    }
+
+    .formats-hint {
+        font-size: 18px;
+    }
+
+    .file-button,
+    .analyze-wrapper {
+        width: 250px;
+        height: 70px;
+    }
+
+    .button-text,
+    .analyze-text {
+        line-height: 70px;
+        font-size: 20px;
+    }
+
+    .results-title {
+        font-size: 28px;
+    }
+
+    .chords-title {
+        font-size: 24px;
+    }
+
+    .chord-label,
+    .chord-value {
+        font-size: 20px;
+    }
+
+    .upload-icon-wrapper {
+        width: 80px;
+        height: 65px;
+    }
+}
+
+@media (max-width: 480px) {
+    .dark-rectangle {
+        padding: 40px 15px 20px 15px;
+    }
+
+    .upload-area {
+        padding: 30px 15px;
+    }
+
+    .global-header {
+        margin-bottom: 8px;
+    }
+
+    .upload-icon-wrapper {
+        width: 70px;
+        height: 55px;
+    }
+}
+
+/* Drag and Drop Styles */
+.upload-area.drag-over {
+    border-color: #4CAF50;
+    background-color: rgba(76, 175, 80, 0.1);
+    transform: scale(1.02);
+}
+
+/* Loading Spinner */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #4CAF50;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
 }
