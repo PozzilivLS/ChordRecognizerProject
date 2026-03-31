@@ -10,23 +10,19 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Анализатор аккордов</title>
+    <title>AutoChord</title>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" />
 </head>
 
 <body>
     <div class="desktop">
-        <!-- Контент с прокруткой -->
         <div class="content-wrapper">
-            <!-- Header элементы над черным прямоугольником -->
             <div class="global-header">
-                <!-- Logo group-4 -->
                 <div class="logo" role="img" aria-label="Логотип">
                     <img src="~/img/group-4.svg" alt="Логотип" class="logo-img" />
                 </div>
-                
-                <!-- User controls -->
+
                 <div class="user-controls">
                     <img src="~/img/vector-15.svg" alt="" class="user-icon" />
                     <button class="profile-btn" aria-label="Профиль пользователя">
@@ -35,24 +31,18 @@
                 </div>
             </div>
 
-            <!-- Dark rounded card container -->
             <div class="dark-rectangle" aria-label="Основная область приложения">
                 @if (string.IsNullOrEmpty(Model.ChordsOutput))
                 {
-                    <!-- Состояние загрузки файла -->
                     <div class="upload-area" role="region" aria-label="Зона загрузки аудиофайла" aria-describedby="upload-hint">
-                        <!-- Upload icon (cloud with arrow) - group-8 -->
                         <div class="upload-icon-wrapper">
                             <img src="~/img/group-9.svg" alt="Загрузка" class="cloud-with-arrow" />
                         </div>
-                        
-                        <!-- Drag and drop label -->
+
                         <p class="drag-text">Перетащите сюда свой аудиофайл</p>
-                        
-                        <!-- Separator -->
+
                         <p class="or-text">или</p>
-                        
-                        <!-- File picker button -->
+
                         <form method="post" enctype="multipart/form-data" asp-page-handler="AddFile" class="upload-form" id="uploadForm">
                             <label class="file-button" for="file-input">
                                 <span class="button-text">Выберите файл</span>
@@ -62,13 +52,11 @@
                                    onchange="document.getElementById('uploadForm').submit();" />
                         </form>
                     </div>
-                    
-                    <!-- Supported formats hint -->
+
                     <p class="formats-hint" id="upload-hint">Поддерживаются WAV, MP3, FLAC, AAC, OGG, M4A</p>
 
                     @if (!string.IsNullOrEmpty(Model.UploadedFileUrl))
                     {
-                        <!-- Analyze button -->
                         <div class="analyze-wrapper">
                             <form method="post" asp-page-handler="RecognizeChords">
                                 <input type="hidden" name="UploadedFileUrl" value="@Model.UploadedFileUrl" />
@@ -80,7 +68,6 @@
                     }
                     else
                     {
-                        <!-- Disabled analyze button -->
                         <div class="analyze-wrapper disabled">
                             <button class="analyze-btn" type="button" disabled>
                                 <span class="analyze-text">Анализировать аккорды</span>
@@ -90,7 +77,6 @@
                 }
                 else
                 {
-                    <!-- Состояние отображения результатов -->
                     <div class="results-container">
                         <h3 class="results-title">Распознанная песня:</h3>
                         
@@ -115,7 +101,6 @@
                             </div>
                         </div>
 
-                        <!-- Кнопка для новой загрузки -->
                         <div class="analyze-wrapper new-file-btn">
                             <button class="analyze-btn" type="button" onclick="resetUpload()">
                                 <span class="analyze-text">Загрузить новый файл</span>

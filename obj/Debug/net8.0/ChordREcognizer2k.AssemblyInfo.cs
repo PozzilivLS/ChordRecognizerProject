@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ChordREcognizer2k")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f8f31527fe6e1737dc0af19d884a0670848aed66")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f14e725297513362580573254110b48acc25e2a3")]
 [assembly: System.Reflection.AssemblyProductAttribute("ChordREcognizer2k")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ChordREcognizer2k")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

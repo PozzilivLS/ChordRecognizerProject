@@ -1,7 +1,3 @@
-/* =============================================
-   GLOBAL STYLES
-   ============================================= */
-
 * {
     -webkit-font-smoothing: antialiased;
     box-sizing: border-box;
@@ -14,24 +10,22 @@ html, body {
     padding: 0;
     width: 100%;
     height: 100%;
-    font-family: "Petrov Sans-Trial-Regular", Helvetica, Arial, sans-serif;
+    font-family: "Petrov Sans-Trial-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
     background-color: #efefef;
+}
+
+@font-face {
+    font-family: "Petrov Sans-Trial-Regular";
+    src: url("/fonts/PetrovSans-Trial-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
 }
 
 button:focus-visible {
     outline: 2px solid #4a90e2 !important;
     outline: -webkit-focus-ring-color auto 5px !important;
 }
-
-/* Font definition */
-@font-face {
-    font-family: "Petrov Sans-Trial-Regular";
-    src: local("Petrov Sans-Trial-Regular");
-}
-
-/* =============================================
-   MAIN LAYOUT
-   ============================================= */
 
 .desktop {
     width: 100%;
@@ -45,10 +39,6 @@ button:focus-visible {
     margin: 0 auto;
     position: relative;
 }
-
-/* =============================================
-   GLOBAL HEADER (над черным прямоугольником)
-   ============================================= */
 
 .global-header {
     display: flex;
@@ -114,10 +104,6 @@ button:focus-visible {
     object-fit: contain;
 }
 
-/* =============================================
-   DARK RECTANGLE (черный прямоугольник)
-   ============================================= */
-
 .dark-rectangle {
     position: relative;
     width: 100%;
@@ -129,10 +115,6 @@ button:focus-visible {
     align-items: center;
     min-height: 907px;
 }
-
-/* =============================================
-   UPLOAD AREA
-   ============================================= */
 
 .upload-area {
     position: relative;
@@ -156,7 +138,6 @@ button:focus-visible {
         background-color: rgba(76, 175, 80, 0.05);
     }
 
-/* Upload Icon Styles - group-8 */
 .upload-icon-wrapper {
     width: 120px;
     height: 100px;
@@ -179,6 +160,7 @@ button:focus-visible {
     font-weight: 400;
     text-align: center;
     margin: 0;
+    font-family: "Petrov Sans-Trial-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .or-text {
@@ -186,9 +168,9 @@ button:focus-visible {
     font-size: 40px;
     font-weight: 400;
     margin: 0;
+    font-family: "Petrov Sans-Trial-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-/* File Button */
 .upload-form {
     margin: 0;
     padding: 0;
@@ -217,6 +199,7 @@ button:focus-visible {
     color: #ffffff;
     font-size: 40px;
     font-weight: 400;
+    font-family: "Petrov Sans-Trial-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .file-input-hidden {
@@ -231,17 +214,13 @@ button:focus-visible {
     pointer-events: none;
 }
 
-/* Formats Hint */
 .formats-hint {
     font-size: 30px;
     color: #bbbbbb;
     text-align: center;
     margin-top: 20px;
+    font-family: "Petrov Sans-Trial-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-
-/* =============================================
-   ANALYZE BUTTON
-   ============================================= */
 
 .analyze-wrapper {
     width: 564px;
@@ -291,11 +270,8 @@ button:focus-visible {
     font-weight: 400;
     text-align: center;
     line-height: 93px;
+    font-family: "Petrov Sans-Trial-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-
-/* =============================================
-   RESULTS STYLES
-   ============================================= */
 
 .results-container {
     display: flex;
@@ -324,6 +300,7 @@ button:focus-visible {
     font-size: 36px;
     text-align: center;
     margin: 0;
+    font-family: "Petrov Sans-Trial-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .audio-player {
@@ -348,6 +325,7 @@ button:focus-visible {
     font-size: 32px;
     text-align: center;
     margin-bottom: 30px;
+    font-family: "Petrov Sans-Trial-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .chord-card {
@@ -370,12 +348,14 @@ button:focus-visible {
     color: #bbbbbb;
     font-size: 28px;
     font-weight: 400;
+    font-family: "Petrov Sans-Trial-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .chord-value {
     color: #ffffff;
     font-size: 32px;
     font-weight: bold;
+    font-family: "Petrov Sans-Trial-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .previous-chord-card {
@@ -405,10 +385,6 @@ button:focus-visible {
     background: linear-gradient(135deg, rgba(68, 68, 68, 1) 0%, rgba(100, 100, 100, 1) 100%);
     margin-top: 20px;
 }
-
-/* =============================================
-   RESPONSIVE DESIGN
-   ============================================= */
 
 @media (max-width: 1200px) {
     .desktop {
@@ -562,14 +538,12 @@ button:focus-visible {
     }
 }
 
-/* Drag and Drop Styles */
 .upload-area.drag-over {
     border-color: #4CAF50;
     background-color: rgba(76, 175, 80, 0.1);
     transform: scale(1.02);
 }
 
-/* Loading Spinner */
 @keyframes spin {
     from {
         transform: rotate(0deg);
