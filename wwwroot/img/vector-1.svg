@@ -1,0 +1,33 @@
+<svg width="821" height="594" viewBox="0 0 821 594" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g opacity="0.73" filter="url(#filter0_ng_1_11)">
+<path d="M-54 100V818H692.342C720.922 747.916 767.751 587.698 601.955 421.881C460.953 280.861 557.536 219.757 322.012 142.267C142.006 83.0429 143.303 116.798 -54 100Z" fill="#607D5D"/>
+<path d="M-54 100V818H692.342C720.922 747.916 767.751 587.698 601.955 421.881C460.953 280.861 557.536 219.757 322.012 142.267C142.006 83.0429 143.303 116.798 -54 100Z" fill="url(#paint0_radial_1_11)" fill-opacity="0.2"/>
+</g>
+<defs>
+<filter id="filter0_ng_1_11" x="-154" y="0" width="975" height="918" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feTurbulence type="fractalNoise" baseFrequency="inf inf" stitchTiles="stitch" numOctaves="3" result="noise" seed="3370" />
+<feColorMatrix in="noise" type="luminanceToAlpha" result="alphaNoise" />
+<feComponentTransfer in="alphaNoise" result="coloredNoise1">
+<feFuncA type="discrete" tableValues="0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 "/>
+</feComponentTransfer>
+<feComposite operator="in" in2="shape" in="coloredNoise1" result="noise1Clipped" />
+<feFlood flood-color="rgba(0, 0, 0, 0.25)" result="color1Flood" />
+<feComposite operator="in" in2="noise1Clipped" in="color1Flood" result="color1" />
+<feMerge result="effect1_noise_1_11">
+<feMergeNode in="shape" />
+<feMergeNode in="color1" />
+</feMerge>
+<feTurbulence type="fractalNoise" baseFrequency="0.99900001287460327 0.99900001287460327" numOctaves="3" seed="1180" />
+<feDisplacementMap in="effect1_noise_1_11" scale="200" xChannelSelector="R" yChannelSelector="G" result="displacedImage" width="100%" height="100%" />
+<feMerge result="effect2_texture_1_11">
+<feMergeNode in="displacedImage"/>
+</feMerge>
+</filter>
+<radialGradient id="paint0_radial_1_11" cx="0" cy="0" r="1" gradientTransform="matrix(370.33 -431.884 466.17 439.99 96.818 687.947)" gradientUnits="userSpaceOnUse">
+<stop offset="0.221154" stop-color="#27F913" stop-opacity="0.77"/>
+<stop offset="1"/>
+</radialGradient>
+</defs>
+</svg>

@@ -9,7 +9,7 @@
 <html lang="ru">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
     <title>AutoChord</title>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" />
@@ -18,11 +18,11 @@
 <body>
     <div class="desktop">
         <div class="content-wrapper">
+            <!-- Глобальный хедер -->
             <div class="global-header">
-                <div class="logo" role="img" aria-label="Логотип">
+                <div class="logo" role="img" aria-label="Логотип" onclick="resetUpload()" style="cursor: pointer;">
                     <img src="~/img/group-4.svg" alt="Логотип" class="logo-img" />
                 </div>
-
                 <div class="user-controls">
                     <img src="~/img/vector-15.svg" alt="" class="user-icon" />
                     <button class="profile-btn" aria-label="Профиль пользователя">
@@ -31,18 +31,16 @@
                 </div>
             </div>
 
-            <div class="dark-rectangle" aria-label="Основная область приложения">
+            <div class="dark-rectangle @(string.IsNullOrEmpty(Model.ChordsOutput) ? "" : "results-page")">
                 @if (string.IsNullOrEmpty(Model.ChordsOutput))
                 {
-                    <div class="upload-area" role="region" aria-label="Зона загрузки аудиофайла" aria-describedby="upload-hint">
+                    <!-- ЗАГРУЗОЧНАЯ СТРАНИЦА -->
+                    <div class="upload-area">
                         <div class="upload-icon-wrapper">
                             <img src="~/img/group-9.svg" alt="Загрузка" class="cloud-with-arrow" />
                         </div>
-
                         <p class="drag-text">Перетащите сюда свой аудиофайл</p>
-
                         <p class="or-text">или</p>
-
                         <form method="post" enctype="multipart/form-data" asp-page-handler="AddFile" class="upload-form" id="uploadForm">
                             <label class="file-button" for="file-input">
                                 <span class="button-text">Выберите файл</span>
@@ -52,8 +50,7 @@
                                    onchange="document.getElementById('uploadForm').submit();" />
                         </form>
                     </div>
-
-                    <p class="formats-hint" id="upload-hint">Поддерживаются WAV, MP3, FLAC, AAC, OGG, M4A</p>
+                    <p class="formats-hint">Поддерживаются WAV, MP3, FLAC, AAC, OGG, M4A</p>
 
                     @if (!string.IsNullOrEmpty(Model.UploadedFileUrl))
                     {
@@ -77,77 +74,278 @@
                 }
                 else
                 {
-                    <div class="results-container">
-                        <h3 class="results-title">Распознанная песня:</h3>
-                        
-                        <audio controls id="audio-player" class="audio-player">
-                            <source src="@Model.UploadedFileUrl" type="audio/mpeg" />
-                            Ваш браузер не поддерживает аудиопроигрывание.
-                        </audio>
+                    <!-- СТРАНИЦА РЕЗУЛЬТАТОВ -->
+                    <div class="results-layout">
+                        <!-- Декоративный фон -->
+                        <img class="decor-bg" src="~/img/group-11.png" alt="" aria-hidden="true" />
 
-                        <div class="chords-panel">
-                            <h3 class="chords-title">Аккорды:</h3>
-                            <div class="chord-card previous-chord-card">
-                                <span class="chord-label">Предыдущий:</span>
-                                <span id="previous-chord" class="chord-value">—</span>
+                        <!-- Верхняя часть: карточка артиста и правая панель -->
+                        <div class="top-section">
+                            <!-- Artist Card -->
+                            <div class="artist-card">
+                                <div class="artist-card-bg"></div>
+                                <img class="album-art" src="~/img/content.png" alt="Album artwork" />
+                                <h2 class="song-title">Sodus</h2>
+                                <p class="artist-name">Cemeteries</p>
+                                <button class="add-chord-btn" type="button">
+                                    <div class="plus-h"></div>
+                                    <div class="plus-v"></div>
+                                </button>
                             </div>
-                            <div class="chord-card current-chord-card">
-                                <span class="chord-label">Текущий:</span>
-                                <span id="current-chord" class="chord-value">—</span>
-                            </div>
-                            <div class="chord-card next-chord-card">
-                                <span class="chord-label">Следующий:</span>
-                                <span id="next-chord" class="chord-value">—</span>
+
+                            <!-- Правая панель -->
+                            <div class="right-panel">
+                                <div class="accords-section">
+                                    <div class="chord-card prev-card">
+                                        <div class="chord-grid">
+                                            <img src="~/img/vector-12-2.svg" alt="Chord grid" />
+                                        </div>
+                                        <span class="chord-name" id="prev-chord-name">—</span>
+                                    </div>
+                                    <div class="chord-card current-card active">
+                                        <div class="chord-grid">
+                                            <img src="~/img/vector-12.svg" alt="Chord grid" />
+                                        </div>
+                                        <span class="chord-name" id="current-chord-name">—</span>
+                                    </div>
+                                    <div class="chord-card next-card">
+                                        <div class="chord-grid">
+                                            <img src="~/img/vector-12-3.svg" alt="Chord grid" />
+                                        </div>
+                                        <span class="chord-name" id="next-chord-name">—</span>
+                                    </div>
+                                </div>
+                                <div class="timeline-placeholder">
+                                    <div class="timeline-bg"></div>
+                                    <div class="timeline-text">Update soon...</div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="analyze-wrapper new-file-btn">
-                            <button class="analyze-btn" type="button" onclick="resetUpload()">
-                                <span class="analyze-text">Загрузить новый файл</span>
-                            </button>
+                        <!-- Audio Player -->
+                        <div class="player" role="region" aria-label="Audio Player">
+                            <!-- Кнопки управления (выше) -->
+                            <div class="player-controls-line">
+                                <div class="speed-control" id="speed-control">
+                                    <span class="speed-value" id="speed-value">1</span>
+                                    <span class="speed-x">x</span>
+                                </div>
+                                <img class="skip-back-btn" src="~/img/skip-back.svg" alt="Skip back" />
+                                <img class="play-pause-btn" id="play-pause-btn" src="~/img/play.svg" alt="Play" />
+                                <img class="skip-forward-btn" src="~/img/skip-forward.svg" alt="Skip forward" />
+                                <img class="repeat-icon" src="~/img/repeat.svg" alt="Repeat" />
+                            </div>
+
+                            <!-- Прогресс бар (ниже) -->
+                            <div class="progress-wrapper">
+                                <div class="player-progress-area">
+                                    <span class="current-time" id="current-time">0:00</span>
+                                    <div class="progress-bar-container" id="progress-container">
+                                        <div class="progress-bg-line"></div>
+                                        <div class="progress-fill-line" id="progress-fill"></div>
+                                        <div class="progress-handle" id="progress-handle"></div>
+                                    </div>
+                                    <span class="total-time" id="total-time">0:00</span>
+                                </div>
+                            </div>
+
+                            <!-- Vector-9, полоска громкости и Vector-10 справа (по центру) -->
+                            <div class="player-right-controls">
+                                <div class="volume-control">
+                                    <img src="~/img/vector-9.svg" alt="Volume" class="volume-icon" />
+                                    <div class="volume-slider">
+                                        <div class="volume-bg-line"></div>
+                                        <div class="volume-fill-line" id="volume-fill"></div>
+                                        <div class="volume-handle" id="volume-handle"></div>
+                                    </div>
+                                </div>
+                                <img class="fullscreen-icon" src="~/img/vector-10.svg" alt="Fullscreen" />
+                            </div>
                         </div>
                     </div>
+
+                    <audio id="audio-player" style="display: none;" preload="auto">
+                        <source src="@Model.UploadedFileUrl" type="audio/mpeg" />
+                    </audio>
 
                     <script>
                         const chordNames = @Html.Raw(Json.Serialize(Model.ChordsOutput.Split(" ")));
                         const chordTimes = @Html.Raw(Json.Serialize(Model.ChordsIntervals.Select(t => t / 1000.0)));
                         const audio = document.getElementById("audio-player");
-
-                        if (audio) {
-                            audio.addEventListener('timeupdate', () => {
-                                const t = audio.currentTime;
-                                let currentIndex = 0;
-                                
-                                // Находим текущий аккорд
-                                for (let i = 0; i < chordTimes.length; i++) {
-                                    if (chordTimes[i] <= t) {
-                                        currentIndex = i;
-                                    } else {
-                                        break;
-                                    }
-                                }
-                                
-                                // Обновляем предыдущий аккорд
-                                if (currentIndex > 0) {
-                                    document.getElementById("previous-chord").innerText = chordNames[currentIndex - 1] ?? "—";
+                        
+                        const playPauseBtn = document.getElementById("play-pause-btn");
+                        const currentTimeSpan = document.getElementById("current-time");
+                        const totalTimeSpan = document.getElementById("total-time");
+                        const progressFill = document.getElementById("progress-fill");
+                        const progressHandle = document.getElementById("progress-handle");
+                        const progressContainer = document.getElementById("progress-container");
+                        const speedControl = document.getElementById("speed-control");
+                        const speedValueSpan = document.getElementById("speed-value");
+                        const volumeFill = document.getElementById("volume-fill");
+                        const volumeHandle = document.getElementById("volume-handle");
+                        const volumeSlider = document.querySelector(".volume-slider");
+                        
+                        let isDragging = false;
+                        let isDraggingVolume = false;
+                        let currentSpeed = 1;
+                        let currentVolume = 0.7;
+                        
+                        function updateChordsDisplay(currentTime) {
+                            let currentIndex = 0;
+                            for (let i = 0; i < chordTimes.length; i++) {
+                                if (chordTimes[i] <= currentTime) {
+                                    currentIndex = i;
                                 } else {
-                                    document.getElementById("previous-chord").innerText = "—";
+                                    break;
                                 }
-                                
-                                // Обновляем текущий аккорд
-                                document.getElementById("current-chord").innerText = chordNames[currentIndex] ?? "—";
-                                
-                                // Обновляем следующий аккорд
-                                if (currentIndex + 1 < chordTimes.length) {
-                                    document.getElementById("next-chord").innerText = chordNames[currentIndex + 1] ?? "—";
+                            }
+                            
+                            document.getElementById("prev-chord-name").innerText = currentIndex > 0 ? chordNames[currentIndex - 1] : "—";
+                            document.getElementById("current-chord-name").innerText = chordNames[currentIndex] || "—";
+                            document.getElementById("next-chord-name").innerText = (currentIndex + 1 < chordTimes.length) ? chordNames[currentIndex + 1] : "—";
+                        }
+                        
+                        function formatTime(seconds) {
+                            if (isNaN(seconds)) return "0:00";
+                            const mins = Math.floor(seconds / 60);
+                            const secs = Math.floor(seconds % 60);
+                            return mins + ":" + secs.toString().padStart(2, '0');
+                        }
+                        
+                        function updateProgressBar() {
+                            if (audio.duration && !isDragging) {
+                                const percent = (audio.currentTime / audio.duration) * 100;
+                                progressFill.style.width = percent + "%";
+                                progressHandle.style.left = percent + "%";
+                            }
+                        }
+                        
+                        function updateVolumeBar() {
+                            if (volumeFill && volumeHandle) {
+                                const percent = currentVolume * 100;
+                                volumeFill.style.width = percent + "%";
+                                volumeHandle.style.left = percent + "%";
+                            }
+                        }
+                        
+                        function setPositionFromEvent(clientX) {
+                            if (!audio.duration) return;
+                            const rect = progressContainer.getBoundingClientRect();
+                            let x = clientX - rect.left;
+                            x = Math.max(0, Math.min(x, rect.width));
+                            const percent = x / rect.width;
+                            const newTime = percent * audio.duration;
+                            audio.currentTime = newTime;
+                            currentTimeSpan.innerText = formatTime(audio.currentTime);
+                            updateProgressBar();
+                            updateChordsDisplay(audio.currentTime);
+                        }
+                        
+                        function setVolumeFromEvent(clientX) {
+                            if (!volumeSlider) return;
+                            const rect = volumeSlider.getBoundingClientRect();
+                            let x = clientX - rect.left;
+                            x = Math.max(0, Math.min(x, rect.width));
+                            const percent = x / rect.width;
+                            currentVolume = percent;
+                            audio.volume = currentVolume;
+                            updateVolumeBar();
+                        }
+                        
+                        if (progressHandle) {
+                            progressHandle.addEventListener('mousedown', function(e) {
+                                isDragging = true;
+                                e.preventDefault();
+                                e.stopPropagation();
+                            });
+                        }
+                        
+                        if (progressContainer) {
+                            progressContainer.addEventListener('click', function(e) {
+                                setPositionFromEvent(e.clientX);
+                            });
+                        }
+                        
+                        if (volumeHandle) {
+                            volumeHandle.addEventListener('mousedown', function(e) {
+                                isDraggingVolume = true;
+                                e.preventDefault();
+                                e.stopPropagation();
+                            });
+                        }
+                        
+                        if (volumeSlider) {
+                            volumeSlider.addEventListener('click', function(e) {
+                                setVolumeFromEvent(e.clientX);
+                            });
+                        }
+                        
+                        window.addEventListener('mousemove', function(e) {
+                            if (isDragging) {
+                                setPositionFromEvent(e.clientX);
+                            }
+                            if (isDraggingVolume) {
+                                setVolumeFromEvent(e.clientX);
+                            }
+                        });
+                        
+                        window.addEventListener('mouseup', function() {
+                            isDragging = false;
+                            isDraggingVolume = false;
+                        });
+                        
+                        if (playPauseBtn) {
+                            playPauseBtn.addEventListener('click', function() {
+                                if (audio.paused) {
+                                    audio.play();
+                                    playPauseBtn.src = "/img/pause.svg";
                                 } else {
-                                    document.getElementById("next-chord").innerText = "—";
+                                    audio.pause();
+                                    playPauseBtn.src = "/img/play.svg";
                                 }
                             });
                         }
-
-                        function resetUpload() {
-                            window.location.href = window.location.pathname;
+                        
+                        if (speedControl) {
+                            speedControl.addEventListener('click', function() {
+                                const speeds = [1, 1.5, 2, 0.5];
+                                const currentIndex = speeds.indexOf(currentSpeed);
+                                currentSpeed = speeds[(currentIndex + 1) % speeds.length];
+                                audio.playbackRate = currentSpeed;
+                                speedValueSpan.innerText = currentSpeed;
+                            });
+                        }
+                        
+                        audio.volume = currentVolume;
+                        updateVolumeBar();
+                        
+                        if (audio) {
+                            audio.addEventListener('loadedmetadata', function() {
+                                totalTimeSpan.innerText = formatTime(audio.duration);
+                                currentTimeSpan.innerText = formatTime(0);
+                                updateProgressBar();
+                                updateChordsDisplay(0);
+                            });
+                            
+                            audio.addEventListener('timeupdate', function() {
+                                if (!isDragging) {
+                                    currentTimeSpan.innerText = formatTime(audio.currentTime);
+                                    updateProgressBar();
+                                    updateChordsDisplay(audio.currentTime);
+                                }
+                            });
+                            
+                            audio.addEventListener('play', function() {
+                                playPauseBtn.src = "/img/pause.svg";
+                            });
+                            
+                            audio.addEventListener('pause', function() {
+                                playPauseBtn.src = "/img/play.svg";
+                            });
+                        }
+                        
+                        function resetUpload() { 
+                            window.location.href = window.location.pathname; 
                         }
                     </script>
                 }

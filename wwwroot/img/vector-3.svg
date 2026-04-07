@@ -1,0 +1,33 @@
+<svg width="962" height="228" viewBox="0 0 962 228" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g opacity="0.74" filter="url(#filter0_ng_1_10)">
+<path d="M203.566 -67.3676L859.338 -4.31165C863.415 18.8994 863.237 70.1707 829.909 89.5676C788.249 113.814 617.834 136.546 531.112 123.317C444.389 110.089 184.727 22.6402 163.155 9.6997C141.582 -3.24078 81.6456 -46.4923 105.527 -76.7946C124.631 -101.036 178.846 -80.6107 203.566 -67.3676Z" fill="#607D5D"/>
+<path d="M203.566 -67.3676L859.338 -4.31165C863.415 18.8994 863.237 70.1707 829.909 89.5676C788.249 113.814 617.834 136.546 531.112 123.317C444.389 110.089 184.727 22.6402 163.155 9.6997C141.582 -3.24078 81.6456 -46.4923 105.527 -76.7946C124.631 -101.036 178.846 -80.6107 203.566 -67.3676Z" fill="url(#paint0_linear_1_10)" fill-opacity="0.2"/>
+</g>
+<defs>
+<filter id="filter0_ng_1_10" x="0" y="-188.069" width="961.148" height="415.285" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feTurbulence type="fractalNoise" baseFrequency="0.2083333283662796 0.2083333283662796" stitchTiles="stitch" numOctaves="3" result="noise" seed="3370" />
+<feColorMatrix in="noise" type="luminanceToAlpha" result="alphaNoise" />
+<feComponentTransfer in="alphaNoise" result="coloredNoise1">
+<feFuncA type="discrete" tableValues="0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 "/>
+</feComponentTransfer>
+<feComposite operator="in" in2="shape" in="coloredNoise1" result="noise1Clipped" />
+<feFlood flood-color="rgba(0, 0, 0, 0.25)" result="color1Flood" />
+<feComposite operator="in" in2="noise1Clipped" in="color1Flood" result="color1" />
+<feMerge result="effect1_noise_1_10">
+<feMergeNode in="shape" />
+<feMergeNode in="color1" />
+</feMerge>
+<feTurbulence type="fractalNoise" baseFrequency="0.99900001287460327 0.99900001287460327" numOctaves="3" seed="1180" />
+<feDisplacementMap in="effect1_noise_1_10" scale="200" xChannelSelector="R" yChannelSelector="G" result="displacedImage" width="100%" height="100%" />
+<feMerge result="effect2_texture_1_10">
+<feMergeNode in="displacedImage"/>
+</feMerge>
+</filter>
+<linearGradient id="paint0_linear_1_10" x1="473.989" y1="-86.4598" x2="448.897" y2="90.6446" gradientUnits="userSpaceOnUse">
+<stop stop-color="#27F913" stop-opacity="0.77"/>
+<stop offset="1"/>
+</linearGradient>
+</defs>
+</svg>

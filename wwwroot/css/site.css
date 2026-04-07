@@ -22,9 +22,9 @@ html, body {
     font-display: swap;
 }
 
-button:focus-visible {
-    outline: 2px solid #4a90e2 !important;
-    outline: -webkit-focus-ring-color auto 5px !important;
+@font-face {
+    font-family: "TT Firs Neue-Medium";
+    src: local("TT Firs Neue-Medium");
 }
 
 .desktop {
@@ -160,7 +160,6 @@ button:focus-visible {
     font-weight: 400;
     text-align: center;
     margin: 0;
-    font-family: "Petrov Sans-Trial-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .or-text {
@@ -168,7 +167,6 @@ button:focus-visible {
     font-size: 40px;
     font-weight: 400;
     margin: 0;
-    font-family: "Petrov Sans-Trial-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .upload-form {
@@ -199,7 +197,6 @@ button:focus-visible {
     color: #ffffff;
     font-size: 40px;
     font-weight: 400;
-    font-family: "Petrov Sans-Trial-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .file-input-hidden {
@@ -219,7 +216,6 @@ button:focus-visible {
     color: #bbbbbb;
     text-align: center;
     margin-top: 20px;
-    font-family: "Petrov Sans-Trial-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .analyze-wrapper {
@@ -270,296 +266,587 @@ button:focus-visible {
     font-weight: 400;
     text-align: center;
     line-height: 93px;
-    font-family: "Petrov Sans-Trial-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-.results-container {
+.dark-rectangle.results-page {
+    position: relative;
+    overflow: hidden;
+    min-height: auto;
+    height: auto;
+    padding: 0;
+    background-color: #232323;
+    border-radius: 50px;
+}
+
+.results-layout {
+    position: relative;
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 40px;
-    padding: 40px 0;
+    padding: 55px 50px 55px 66px;
+}
+
+.decor-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    animation: fadeIn 0.5s ease;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    z-index: 0;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.top-section {
+    position: relative;
+    display: flex;
+    gap: 40px;
+    z-index: 2;
 }
 
-.results-title {
+.artist-card {
+    position: relative;
+    width: 500px;
+    flex-shrink: 0;
+    z-index: 2;
+    height: 576px;
+    min-height: 500px;
+    align-self: stretch;
+}
+
+.artist-card-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(217, 217, 217, 0.2);
+    backdrop-filter: blur(39.5px);
+    border-radius: 16px;
+    box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.12), inset -1px 0 26px rgba(0, 0, 0, 0.16);
+}
+
+.album-art {
+    position: absolute;
+    top: 27px;
+    left: 23px;
+    width: calc(100% - 46px);
+    height: 480px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.song-title {
+    position: absolute;
+    top: 475px !important;
+    left: 34px;
+    font-family: "Petrov Sans-Trial-Regular", Helvetica;
+    font-weight: 400;
     color: #ffffff;
-    font-size: 36px;
-    text-align: center;
+    font-size: 34px;
     margin: 0;
-    font-family: "Petrov Sans-Trial-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-.audio-player {
-    width: 100%;
-    max-width: 600px;
-    border-radius: 50px;
+.artist-name {
+    position: absolute;
+    top: 515px !important;
+    left: 34px;
+    font-family: "Petrov Sans-Trial-Regular", Helvetica;
+    font-weight: 400;
+    color: #bbbbbb;
+    font-size: 27px;
+    margin: 0;
+}
+
+.add-chord-btn {
+    position: absolute;
+    bottom: 45px;
+    right: 30px;
+    width: 48px;
+    height: 48px;
+    border-radius: 24px;
+    border: 4px solid #efefef;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.3s ease;
+    z-index: 20;
+}
+
+    .add-chord-btn:hover {
+        transform: scale(1.1);
+        background-color: rgba(239, 239, 239, 0.2);
+    }
+
+.plus-h, .plus-v {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 3px;
+    height: 23px;
     background-color: #efefef;
-    padding: 10px;
+    border-radius: 2px;
 }
 
-.chords-panel {
+.plus-h {
+    transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.plus-v {
+    transform: translate(-50%, -50%);
+}
+
+.right-panel {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    z-index: 2;
+    gap: 40px;
+    min-width: 0;
+}
+
+.accords-section {
+    position: relative;
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    flex-wrap: nowrap;
     width: 100%;
-    max-width: 800px;
-    background: rgba(239, 239, 239, 0.1);
-    border-radius: 36px;
-    padding: 30px;
-    backdrop-filter: blur(10px);
-}
-
-.chords-title {
-    color: #ffffff;
-    font-size: 32px;
-    text-align: center;
-    margin-bottom: 30px;
-    font-family: "Petrov Sans-Trial-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .chord-card {
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 28px;
-    padding: 20px 30px;
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    position: relative;
+    width: 300px;
+    height: 385px;
+    flex-shrink: 0;
+    background-color: rgba(217, 217, 217, 0.11);
+    border-radius: 16px;
+    backdrop-filter: blur(39.5px);
+    box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.12), inset -1px 0 26px rgba(0, 0, 0, 0.16);
     transition: all 0.3s ease;
 }
 
-    .chord-card:hover {
-        transform: translateX(10px);
-        background: rgba(0, 0, 0, 0.4);
+    .chord-card.active {
+        background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(73, 115, 69, 0.3));
+        box-shadow: 0 0 20px rgba(76, 175, 80, 0.3);
     }
 
-.chord-label {
+.chord-grid {
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 235px;
+    height: 275px;
+}
+
+    .chord-grid img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+.chord-name {
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: "TT Firs Neue-Medium", Helvetica;
+    font-weight: 500;
+    color: #efefef;
+    font-size: 34px;
+    white-space: nowrap;
+    margin: 0;
+}
+
+.timeline-placeholder {
+    position: relative;
+    width: calc(300px * 3 + 40px * 2);
+    max-width: 100%;
+    height: 200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.timeline-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(217, 217, 217, 0.2);
+    border-radius: 16px;
+    backdrop-filter: blur(39.5px);
+    box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.12), inset -1px 0 26px rgba(0, 0, 0, 0.16);
+}
+
+.timeline-text {
+    position: relative;
+    z-index: 3;
+    font-family: "TT Firs Neue-Medium", Helvetica;
+    font-weight: 500;
     color: #bbbbbb;
     font-size: 28px;
-    font-weight: 400;
-    font-family: "Petrov Sans-Trial-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 15px 30px;
+    border-radius: 20px;
 }
 
-.chord-value {
+/* =============================================
+   АУДИО ПЛЕЕР - ФИНАЛЬНАЯ ВЕРСИЯ
+   ============================================= */
+
+.player {
+    position: relative;
+    width: 100%;
+    height: 128px;
+    background-color: rgba(217, 217, 217, 0.2);
+    backdrop-filter: blur(39.5px);
+    border-radius: 16px;
+    z-index: 2;
+    box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.12), inset -1px 0 26px rgba(0, 0, 0, 0.16);
+}
+
+/* Кнопки управления - выше (top: 35%) */
+.player-controls-line {
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+}
+
+.speed-control {
+    display: flex;
+    gap: 2px;
+    cursor: pointer;
+    align-items: baseline;
+}
+
+.speed-value {
+    font-family: "TT Firs Neue-Medium", Helvetica;
+    font-weight: 500;
+    color: #bbbbbb;
+    font-size: 22px;
+    line-height: 1;
+}
+
+.speed-x {
+    font-family: "TT Firs Neue-Medium", Helvetica;
+    font-weight: 500;
+    color: #bbbbbb;
+    font-size: 16px;
+    line-height: 1;
+}
+
+.skip-back-btn,
+.skip-forward-btn {
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.play-pause-btn {
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.repeat-icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+    .skip-back-btn:hover,
+    .skip-forward-btn:hover,
+    .play-pause-btn:hover,
+    .repeat-icon:hover,
+    .speed-control:hover {
+        transform: scale(1.05);
+    }
+
+/* Прогресс бар - ниже (top: 65%) */
+.progress-wrapper {
+    position: absolute;
+    top: 65%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: center;
+    padding: 0 20px;
+}
+
+.player-progress-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 600px;
+}
+
+.current-time,
+.total-time {
+    font-family: "TT Firs Neue-Medium", Helvetica;
+    font-weight: 500;
     color: #ffffff;
-    font-size: 32px;
-    font-weight: bold;
-    font-family: "Petrov Sans-Trial-Regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    min-width: 38px;
 }
 
-.previous-chord-card {
-    border-left: 4px solid #ff9800;
+.progress-bar-container {
+    flex: 1;
+    height: 8px;
+    position: relative;
+    cursor: pointer;
 }
 
-.current-chord-card {
-    border-left: 4px solid #4a90e2;
-    animation: pulse 2s infinite;
+.progress-bg-line {
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    background-color: rgba(255, 255, 255, 0.3);
+    top: 1.5px;
+    border-radius: 2.5px;
 }
 
-@keyframes pulse {
-    0%, 100% {
-        border-left-color: #4a90e2;
-    }
-
-    50% {
-        border-left-color: #6aa8f5;
-    }
+.progress-fill-line {
+    position: absolute;
+    width: 0%;
+    height: 5px;
+    background-color: #4CAF50;
+    top: 1.5px;
+    border-radius: 2.5px;
+    transition: width 0.1s linear;
 }
 
-.next-chord-card {
-    border-left: 4px solid #73b569;
+.progress-handle {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background-color: #efefef;
+    border-radius: 50%;
+    top: -3px;
+    left: 0%;
+    transform: translateX(-50%);
+    cursor: pointer;
+    transition: left 0.1s linear;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-.new-file-btn {
-    background: linear-gradient(135deg, rgba(68, 68, 68, 1) 0%, rgba(100, 100, 100, 1) 100%);
-    margin-top: 20px;
+    .progress-handle:hover {
+        transform: translateX(-50%) scale(1.2);
+    }
+
+/* Vector-9, полоска громкости и Vector-10 справа (по центру) */
+.player-right-controls {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
-@media (max-width: 1200px) {
-    .desktop {
-        padding: 20px;
+.volume-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.volume-icon {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+}
+
+.volume-slider {
+    width: 100px;
+    height: 8px;
+    position: relative;
+    cursor: pointer;
+}
+
+.volume-bg-line {
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    background-color: rgba(255, 255, 255, 0.3);
+    top: 1.5px;
+    border-radius: 2.5px;
+}
+
+.volume-fill-line {
+    position: absolute;
+    width: 70%;
+    height: 5px;
+    background-color: #4CAF50;
+    top: 1.5px;
+    border-radius: 2.5px;
+    transition: width 0.1s linear;
+}
+
+.volume-handle {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background-color: #efefef;
+    border-radius: 50%;
+    top: -2px;
+    left: 70%;
+    transform: translateX(-50%);
+    cursor: pointer;
+    transition: left 0.1s linear;
+}
+
+    .volume-handle:hover {
+        transform: translateX(-50%) scale(1.2);
     }
 
-    .dark-rectangle {
-        padding: 60px 40px 40px 40px;
+.fullscreen-icon {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+}
+
+    .volume-icon:hover,
+    .fullscreen-icon:hover {
+        transform: scale(1.05);
     }
 
-    .drag-text,
-    .or-text,
-    .button-text,
-    .analyze-text {
-        font-size: 32px;
+/* Адаптив */
+@media (max-width: 1600px) {
+    .results-layout {
+        padding: 40px 40px 40px 50px;
+        gap: 30px;
     }
 
-    .file-button,
-    .analyze-wrapper {
-        width: 300px;
-        height: 80px;
+    .top-section {
+        gap: 30px;
     }
 
-    .button-text,
-    .analyze-text {
-        line-height: 80px;
+    .artist-card {
+        width: 430px;
     }
 
-    .upload-area {
-        min-height: auto;
-        padding: 40px 20px;
+    .album-art {
+        height: 410px;
     }
 
-    .formats-hint {
+    .song-title {
+        top: 460px;
+        font-size: 30px;
+    }
+
+    .artist-name {
+        top: 500px;
         font-size: 24px;
+    }
+
+    .right-panel {
+        gap: 30px;
+    }
+
+    .accords-section {
+        gap: 30px;
     }
 
     .chord-card {
-        flex-direction: column;
-        text-align: center;
-        gap: 10px;
+        width: 270px;
+        height: 345px;
     }
 
-    .chord-label,
-    .chord-value {
-        font-size: 24px;
+    .chord-grid {
+        width: 210px;
+        height: 245px;
+        top: 70px;
     }
 
-    .global-header {
-        margin-bottom: 15px;
-        padding: 0 10px;
+    .chord-name {
+        font-size: 30px;
     }
 
-    .upload-icon-wrapper {
-        width: 100px;
-        height: 80px;
+    .timeline-placeholder {
+        width: calc(270px * 3 + 30px * 2);
     }
 }
 
-@media (max-width: 768px) {
-    .desktop {
-        padding: 15px;
+@media (max-width: 1400px) {
+    .results-layout {
+        padding: 30px 30px 30px 40px;
+        gap: 25px;
     }
 
-    .global-header {
-        margin-bottom: 10px;
-        padding: 0 5px;
+    .top-section {
+        gap: 25px;
     }
 
-    .logo {
-        width: 50px;
-        height: 46px;
+    .artist-card {
+        width: 380px;
     }
 
-    .profile-btn {
-        width: 60px;
-        height: 60px;
+    .album-art {
+        height: 360px;
     }
 
-    .user-icon {
-        width: 24px;
-        height: 24px;
+    .song-title {
+        top: 405px;
+        font-size: 26px;
     }
 
-    .dark-rectangle {
-        padding: 50px 20px 30px 20px;
+    .artist-name {
+        top: 440px;
+        font-size: 21px;
     }
 
-    .drag-text,
-    .or-text,
-    .button-text,
-    .analyze-text {
-        font-size: 24px;
+    .right-panel {
+        gap: 25px;
     }
 
-    .analyze-text {
-        line-height: 70px;
+    .accords-section {
+        gap: 25px;
     }
 
-    .formats-hint {
-        font-size: 18px;
+    .chord-card {
+        width: 240px;
+        height: 310px;
     }
 
-    .file-button,
-    .analyze-wrapper {
-        width: 250px;
-        height: 70px;
+    .chord-grid {
+        width: 185px;
+        height: 220px;
+        top: 60px;
     }
 
-    .button-text,
-    .analyze-text {
-        line-height: 70px;
-        font-size: 20px;
+    .chord-name {
+        font-size: 26px;
     }
 
-    .results-title {
-        font-size: 28px;
+    .timeline-placeholder {
+        width: calc(240px * 3 + 25px * 2);
     }
 
-    .chords-title {
-        font-size: 24px;
-    }
-
-    .chord-label,
-    .chord-value {
-        font-size: 20px;
-    }
-
-    .upload-icon-wrapper {
-        width: 80px;
-        height: 65px;
+    .player-progress-area {
+        width: 500px;
     }
 }
 
-@media (max-width: 480px) {
-    .dark-rectangle {
-        padding: 40px 15px 20px 15px;
+@media (max-width: 1200px) {
+    .dark-rectangle.results-page {
+        overflow-x: auto;
     }
 
-    .upload-area {
-        padding: 30px 15px;
+    .results-layout {
+        min-width: 1100px;
     }
-
-    .global-header {
-        margin-bottom: 8px;
-    }
-
-    .upload-icon-wrapper {
-        width: 70px;
-        height: 55px;
-    }
-}
-
-.upload-area.drag-over {
-    border-color: #4CAF50;
-    background-color: rgba(76, 175, 80, 0.1);
-    transform: scale(1.02);
-}
-
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-.loading-spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    border-top-color: #4CAF50;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 20px auto;
 }
