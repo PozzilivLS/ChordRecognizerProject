@@ -95,36 +95,35 @@
 
                             <!-- Правая панель -->
                             <div class="right-panel">
+                                <!-- Аккорды с SVG из папки chords -->
                                 <div class="accords-section">
-                                    <div class="chord-card prev-card">
-                                        <div class="chord-grid">
-                                            <img src="~/img/vector-12-2.svg" alt="Chord grid" />
-                                        </div>
-                                        <span class="chord-name" id="prev-chord-name">—</span>
-                                    </div>
                                     <div class="chord-card current-card active">
-                                        <div class="chord-grid">
-                                            <img src="~/img/vector-12.svg" alt="Chord grid" />
-                                        </div>
-                                        <span class="chord-name" id="current-chord-name">—</span>
+                                        <img class="chord-svg" id="current-chord-svg" src="~/img/chords/G.svg" alt="Current chord" />
                                     </div>
                                     <div class="chord-card next-card">
-                                        <div class="chord-grid">
-                                            <img src="~/img/vector-12-3.svg" alt="Chord grid" />
-                                        </div>
-                                        <span class="chord-name" id="next-chord-name">—</span>
+                                        <img class="chord-svg" id="next-chord-svg" src="~/img/chords/Em.svg" alt="Next chord" />
+                                    </div>
+                                    <div class="chord-card after-next-card">
+                                        <img class="chord-svg" id="after-next-chord-svg" src="~/img/chords/C.svg" alt="After next chord" />
                                     </div>
                                 </div>
-                                <div class="timeline-placeholder">
+
+                                <!-- Timeline -->
+                                <div class="timeline-container">
                                     <div class="timeline-bg"></div>
-                                    <div class="timeline-text">Update soon...</div>
+                                    <div class="timeline-inner-frame"></div>
+                                    <div class="timeline-line-top"></div>
+                                    <div class="timeline-line-middle"></div>
+                                    <div class="timeline-viewport" id="timeline-viewport">
+                                        <div class="timeline-scroll" id="timeline-scroll"></div>
+                                    </div>
+                                    <div class="timeline-current-line" id="timeline-current-line"></div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Audio Player -->
                         <div class="player" role="region" aria-label="Audio Player">
-                            <!-- Кнопки управления (выше) -->
                             <div class="player-controls-line">
                                 <div class="speed-control" id="speed-control">
                                     <span class="speed-value" id="speed-value">1</span>
@@ -136,7 +135,6 @@
                                 <img class="repeat-icon" src="~/img/repeat.svg" alt="Repeat" />
                             </div>
 
-                            <!-- Прогресс бар (ниже) -->
                             <div class="progress-wrapper">
                                 <div class="player-progress-area">
                                     <span class="current-time" id="current-time">0:00</span>
@@ -149,7 +147,6 @@
                                 </div>
                             </div>
 
-                            <!-- Vector-9, полоска громкости и Vector-10 справа (по центру) -->
                             <div class="player-right-controls">
                                 <div class="volume-control">
                                     <img src="~/img/vector-9.svg" alt="Volume" class="volume-icon" />
@@ -185,10 +182,30 @@
                         const volumeHandle = document.getElementById("volume-handle");
                         const volumeSlider = document.querySelector(".volume-slider");
                         
+                        // SVG аккордов
+                        const currentChordSvg = document.getElementById("current-chord-svg");
+                        const nextChordSvg = document.getElementById("next-chord-svg");
+                        const afterNextChordSvg = document.getElementById("after-next-chord-svg");
+                        
+                        // Timeline элементы
+                        const timelineScroll = document.getElementById("timeline-scroll");
+                        const timelineViewport = document.getElementById("timeline-viewport");
+                        const timelineCurrentLine = document.getElementById("timeline-current-line");
+                        
                         let isDragging = false;
                         let isDraggingVolume = false;
                         let currentSpeed = 1;
                         let currentVolume = 0.7;
+                        let currentScrollLeft = 0;
+                        let isScrolling = false;
+                        
+                        const PIXELS_PER_SECOND = 120;
+                        const VISIBLE_SECONDS = 7;
+                        
+                        function getChordFileName(chordName) {
+                            if (!chordName || chordName === "—") return "Empty.svg";
+                            return chordName + ".svg";
+                        }
                         
                         function updateChordsDisplay(currentTime) {
                             let currentIndex = 0;
@@ -200,9 +217,27 @@
                                 }
                             }
                             
-                            document.getElementById("prev-chord-name").innerText = currentIndex > 0 ? chordNames[currentIndex - 1] : "—";
-                            document.getElementById("current-chord-name").innerText = chordNames[currentIndex] || "—";
-                            document.getElementById("next-chord-name").innerText = (currentIndex + 1 < chordTimes.length) ? chordNames[currentIndex + 1] : "—";
+                            // Текущий аккорд (слева)
+                            const currentChord = chordNames[currentIndex];
+                            if (currentChord && currentChordSvg) {
+                                currentChordSvg.src = "/img/chords/" + getChordFileName(currentChord);
+                            }
+                            
+                            // Следующий аккорд (по центру)
+                            const nextChord = (currentIndex + 1 < chordTimes.length) ? chordNames[currentIndex + 1] : null;
+                            if (nextChord && nextChordSvg) {
+                                nextChordSvg.src = "/img/chords/" + getChordFileName(nextChord);
+                            } else if (nextChordSvg) {
+                                nextChordSvg.src = "/img/chords/Empty.svg";
+                            }
+                            
+                            // После следующего (третий аккорд) (справа)
+                            const afterNextChord = (currentIndex + 2 < chordTimes.length) ? chordNames[currentIndex + 2] : null;
+                            if (afterNextChord && afterNextChordSvg) {
+                                afterNextChordSvg.src = "/img/chords/" + getChordFileName(afterNextChord);
+                            } else if (afterNextChordSvg) {
+                                afterNextChordSvg.src = "/img/chords/Empty.svg";
+                            }
                         }
                         
                         function formatTime(seconds) {
@@ -228,6 +263,117 @@
                             }
                         }
                         
+                        function buildTimeline() {
+                            if (!timelineScroll || !audio.duration) return;
+                            
+                            const totalSeconds = audio.duration;
+                            const totalWidth = totalSeconds * PIXELS_PER_SECOND;
+                            timelineScroll.style.width = totalWidth + "px";
+                            timelineScroll.style.position = "relative";
+                            timelineScroll.style.height = "168px";
+                            
+                            timelineScroll.innerHTML = "";
+                            
+                            // Секундные отметки
+                            for (let sec = 0; sec <= Math.ceil(totalSeconds); sec++) {
+                                const xPos = sec * PIXELS_PER_SECOND;
+                                
+                                const markContainer = document.createElement("div");
+                                markContainer.className = "timeline-second-mark";
+                                markContainer.style.position = "absolute";
+                                markContainer.style.left = xPos + "px";
+                                markContainer.style.top = "0";
+                                markContainer.style.display = "flex";
+                                markContainer.style.flexDirection = "column";
+                                markContainer.style.alignItems = "center";
+                                
+                                const timeLabel = document.createElement("span");
+                                timeLabel.className = "timeline-time-label";
+                                timeLabel.innerText = formatTime(sec);
+                                timeLabel.style.marginTop = "8px";
+                                markContainer.appendChild(timeLabel);
+                                
+                                const tick = document.createElement("div");
+                                tick.className = "timeline-time-tick";
+                                markContainer.appendChild(tick);
+                                
+                                timelineScroll.appendChild(markContainer);
+                            }
+                            
+                            // Точки аккордов на средней линии
+                            for (let i = 0; i < chordTimes.length; i++) {
+                                const chordSec = chordTimes[i];
+                                const xPos = chordSec * PIXELS_PER_SECOND;
+                                
+                                const dot = document.createElement("div");
+                                dot.className = "timeline-chord-dot";
+                                dot.style.position = "absolute";
+                                dot.style.left = xPos + "px";
+                                dot.style.top = "100px";
+                                dot.setAttribute("data-time", chordSec);
+                                dot.setAttribute("data-chord", chordNames[i]);
+                                
+                                dot.addEventListener('click', (function(time) {
+                                    return function() {
+                                        audio.currentTime = time;
+                                        currentTimeSpan.innerText = formatTime(audio.currentTime);
+                                        updateProgressBar();
+                                        updateTimelineScroll();
+                                        updateChordsDisplay(audio.currentTime);
+                                    };
+                                })(chordSec));
+                                
+                                timelineScroll.appendChild(dot);
+                                
+                                // Название аккорда над точкой
+                                const chordName = document.createElement("span");
+                                chordName.className = "timeline-chord-name";
+                                chordName.innerText = chordNames[i];
+                                chordName.style.position = "absolute";
+                                chordName.style.left = xPos + "px";
+                                chordName.style.top = "45px";
+                                timelineScroll.appendChild(chordName);
+                            }
+                        }
+                        
+                        function updateTimelineScroll() {
+                            if (!timelineViewport || !audio.duration) return;
+                            
+                            const currentSec = audio.currentTime;
+                            const scrollCenter = currentSec * PIXELS_PER_SECOND;
+                            const viewportWidth = timelineViewport.clientWidth;
+                            
+                            let scrollLeft = scrollCenter - viewportWidth / 2;
+                            scrollLeft = Math.max(0, Math.min(scrollLeft, timelineScroll.scrollWidth - viewportWidth));
+                            
+                            timelineViewport.scrollLeft = scrollLeft;
+                            currentScrollLeft = scrollLeft;
+                            
+                            const lineLeft = scrollCenter - scrollLeft;
+                            if (lineLeft >= 0 && lineLeft <= viewportWidth) {
+                                timelineCurrentLine.style.display = "block";
+                                timelineCurrentLine.style.left = (29 + lineLeft) + "px";
+                            } else {
+                                timelineCurrentLine.style.display = "none";
+                            }
+                        }
+                        
+                        function setPositionFromTimeline(clientX) {
+                            if (!timelineViewport || !audio.duration) return;
+                            
+                            const rect = timelineViewport.getBoundingClientRect();
+                            const clickX = clientX - rect.left;
+                            const absoluteX = timelineViewport.scrollLeft + clickX;
+                            const newSec = absoluteX / PIXELS_PER_SECOND;
+                            const newTime = Math.max(0, Math.min(newSec, audio.duration));
+                            
+                            audio.currentTime = newTime;
+                            currentTimeSpan.innerText = formatTime(audio.currentTime);
+                            updateProgressBar();
+                            updateTimelineScroll();
+                            updateChordsDisplay(audio.currentTime);
+                        }
+                        
                         function setPositionFromEvent(clientX) {
                             if (!audio.duration) return;
                             const rect = progressContainer.getBoundingClientRect();
@@ -238,6 +384,7 @@
                             audio.currentTime = newTime;
                             currentTimeSpan.innerText = formatTime(audio.currentTime);
                             updateProgressBar();
+                            updateTimelineScroll();
                             updateChordsDisplay(audio.currentTime);
                         }
                         
@@ -250,6 +397,29 @@
                             currentVolume = percent;
                             audio.volume = currentVolume;
                             updateVolumeBar();
+                        }
+                        
+                        if (timelineViewport) {
+                            timelineViewport.addEventListener('scroll', function() {
+                                if (!isScrolling) {
+                                    currentScrollLeft = timelineViewport.scrollLeft;
+                                    const currentSec = audio.currentTime;
+                                    const currentX = currentSec * PIXELS_PER_SECOND;
+                                    const lineLeft = currentX - currentScrollLeft;
+                                    const viewportWidth = timelineViewport.clientWidth;
+                                    
+                                    if (lineLeft >= 0 && lineLeft <= viewportWidth) {
+                                        timelineCurrentLine.style.display = "block";
+                                        timelineCurrentLine.style.left = (29 + lineLeft) + "px";
+                                    } else {
+                                        timelineCurrentLine.style.display = "none";
+                                    }
+                                }
+                            });
+                            
+                            timelineViewport.addEventListener('click', function(e) {
+                                setPositionFromTimeline(e.clientX);
+                            });
                         }
                         
                         if (progressHandle) {
@@ -324,6 +494,8 @@
                                 totalTimeSpan.innerText = formatTime(audio.duration);
                                 currentTimeSpan.innerText = formatTime(0);
                                 updateProgressBar();
+                                buildTimeline();
+                                updateTimelineScroll();
                                 updateChordsDisplay(0);
                             });
                             
@@ -331,6 +503,7 @@
                                 if (!isDragging) {
                                     currentTimeSpan.innerText = formatTime(audio.currentTime);
                                     updateProgressBar();
+                                    updateTimelineScroll();
                                     updateChordsDisplay(audio.currentTime);
                                 }
                             });
